@@ -63,11 +63,10 @@ ssize_t get_input(info_t *info)
 	r = input_buf(info, &buf, &len);
 	if (r == -1) /* EOF */
 		return (-1);
-	if (len)        /* we have commands left in the chain buffer */
+	if (len) /* we have commands left in the chain buffer */
 	{
 		j = i; /* init new iterator to current buf position */
 		p = buf + i; /* get pointer for return */
-
 		check_chain(info, buf, &j, i, len);
 		while (j < len) /* iterate to semicolon or end */
 		{
@@ -75,14 +74,12 @@ ssize_t get_input(info_t *info)
 				break;
 			j++;
 		}
-
 		i = j + 1; /* increment past nulled ';'' */
 		if (i >= len) /* reached end of buffer? */
 		{
 			i = len = 0; /* reset position and length */
 			info->cmd_buf_type = CMD_NORM;
 		}
-
 		*buf_p = p; /* pass back pointer to current command position */
 		return (_strlen(p)); /* return length of current command */
 	}
@@ -115,7 +112,7 @@ ssize_t read_buf(info_t *info, char *buf, size_t *i)
 /**
  * _getline - gets the next line of input from STDIN
  * @info: parameter struct
- * @ptr: address if pointer to buffer, preallocated or NULL
+ * @ptr: address of pointer to buffer, preallocated or NULL
  * @length: size of preallocated ptr buffer if not NULL
  *
  * Return: s
@@ -141,8 +138,8 @@ int _getline(info_t *info, char **ptr, size_t *length)
 
 	c = _strchr(buf + i, '\n');
 	k = c ? 1 + (unsigned int)(c - buf) : len;
-	new_p = realloc(p, s, s ? s + k : k + 1);
-	if (!new_p) /* MALLOC FAILURE */
+	new_p = _realloc(p, s, s ? s + k : k + 1);
+	if (!new_p) /* MALLOC FAILURE! */
 		return (p ? free(p), -1 : -1);
 
 	if (s)
@@ -150,7 +147,7 @@ int _getline(info_t *info, char **ptr, size_t *length)
 	else
 		_strncpy(new_p, buf + i, k - i + 1);
 
-	s += k = i;
+	s += k - i;
 	i = k;
 	p = new_p;
 
@@ -161,7 +158,7 @@ int _getline(info_t *info, char **ptr, size_t *length)
 }
 
 /**
- * sigintHandler - blocks ctrl -c
+ * sigintHandler - blocks ctrl-C
  * @sig_num: the signal number
  *
  * Return: void

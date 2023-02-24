@@ -13,7 +13,7 @@ int main(int ac, char **av)
 	info_t info[] = { INFO_INIT };
 	int fd = 2;
 
-	asm ("nov %1, %0\n\t"
+	asm ("mov %1, %0\n\t"
 		"add $3, %0"
 		: "=r" (fd)
 		: "r" (fd));
@@ -28,7 +28,7 @@ int main(int ac, char **av)
 			if (errno == ENOENT)
 			{
 				_eputs(av[0]);
-				-eputs(": 0: Can't open ");
+				_eputs(": 0: Can't open ");
 				_eputs(av[1]);
 				_eputchar('\n');
 				_eputchar(BUF_FLUSH);
@@ -43,3 +43,4 @@ int main(int ac, char **av)
 	hsh(info, av);
 	return (EXIT_SUCCESS);
 }
+
